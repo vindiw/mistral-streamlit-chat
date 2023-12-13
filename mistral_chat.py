@@ -8,8 +8,12 @@ st.title("Mistral Chat")
 api_key = os.environ["MISTRAL_API_KEY"]
 client = MistralClient(api_key=api_key)
 
+# Initialize the model in session state if it's not already set
 if "mistral_model" not in st.session_state:
-    st.session_state["mistral_model"] = st.selectbox('Select a model', ('mistral-tiny', 'mistral-small', 'mistral-medium'), 0)
+    st.session_state["mistral_model"] = 'mistral-tiny'
+
+# Always display the dropdown
+st.session_state["mistral_model"] = st.selectbox('Select a model', ('mistral-tiny', 'mistral-small', 'mistral-medium'), index=0, key=st.session_state["mistral_model"])
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
