@@ -19,7 +19,8 @@ if "mistral_model" not in st.session_state:
     st.session_state["mistral_model"] = 'mistral-tiny'
 
 # Always display the dropdown
-st.session_state["mistral_model"] = st.selectbox('Select a model', ('mistral-tiny', 'mistral-small', 'mistral-medium'), index=0, key=st.session_state["mistral_model"])
+model_options = ('mistral-tiny', 'mistral-small', 'mistral-medium')
+st.session_state["mistral_model"] = st.selectbox('Select a model', model_options, index=model_options.index(st.session_state["mistral_model"]), key="model_select")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
