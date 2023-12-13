@@ -22,12 +22,22 @@ if "mistral_model" not in st.session_state:
 model_options = ('mistral-tiny', 'mistral-small', 'mistral-medium')
 st.session_state["mistral_model"] = st.selectbox('Select a model', model_options, index=model_options.index(st.session_state["mistral_model"]), key="model_select")
 
+# Add system prompt input
+if "system_prompt" not in st.session_state:
+    st.session_state["system_prompt"] = ''
+st.text_input('System Prompt', value=st.session_state["system_prompt"], key="system_prompt")
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+# Add system prompt as a ChatMessage if it doesn't exist
+if st.session_state["system_prompt"] and not any(message.role == "system" for message in st.session_state.messages):
+    st.session_state.messages.insert(0, ChatMessage(role="system", content=st.session_state["system_prompt"]))
+
 for message in st.session_state.messages:
-    with st.chat_message(message.role):  # Use dot notation here
-        st.markdown(message.content)  # And here
+    if message.role != "system":  # Skip system messages for UI
+        with st.chat_message(message.role):  # Use dot notation here
+            st.markdown(message.content)  # And here
 
 if prompt := st.chat_input("What is up?"):
     new_message = ChatMessage(role="user", content=prompt)
