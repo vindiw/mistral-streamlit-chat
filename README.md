@@ -1,7 +1,3 @@
-# Mistral Streamlit Chat
-
-This is a simple Streamlit chat application that interacts with MistralAI's API.
-
 ## Quick Start Guide
 
 1. Clone the repository: 
