@@ -8,15 +8,11 @@ st.title("Mistral Chat")
 # Get the API key from the environment variables or the user
 api_key = os.getenv("MISTRAL_API_KEY")
 if not api_key:
-    api_key = st.text_input("Enter your Mistral API key", type="password", key="api_key_input")
-    if api_key:
-        st.session_state["api_key"] = api_key
+    if "api_key" not in st.session_state:
+        st.session_state["api_key"] = st.text_input("Enter your API key", type="password")
+    api_key = st.session_state["api_key"]
 
-if "api_key" in st.session_state:
-    client = MistralClient(api_key=st.session_state["api_key"])
-else:
-    st.warning("Enter your Mistral API key to use the app.")
-    st.stop()
+client = MistralClient(api_key=api_key)
 
 # Initialize the model in session state if it's not already set
 if "mistral_model" not in st.session_state:
