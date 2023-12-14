@@ -5,12 +5,27 @@ import os
 
 st.title("Mistral Chat")
 
+# Function to reset the state
+def reset_state():
+    for key in st.session_state:
+        del st.session_state[key]
+
 # Get the API key from the environment variables or the user
 api_key = os.getenv("MISTRAL_API_KEY")
 if not api_key:
     if "api_key" not in st.session_state:
         st.session_state["api_key"] = st.text_input("Enter your API key", type="password")
     api_key = st.session_state["api_key"]
+else:
+    if expected_password := os.getenv("PASSWORD"):
+        password = st.text_input("What's the secret password?", type="password")
+        # Check if the entered key matches the expected password
+        if password != expected_password:
+            api_key = ''
+            st.error("Unauthorized access.")
+            reset_state()  # This line will reset the script
+        else:
+            api_key = os.getenv("MISTRAL_API_KEY")
 
 client = MistralClient(api_key=api_key)
 
